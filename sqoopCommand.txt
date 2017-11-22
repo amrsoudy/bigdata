@@ -1,0 +1,40 @@
+///pour transever/ le structural DB to hadoop or the contraire 
+//Data exchange 
+
+
+//Sqoop Tool PROPERTY_ARGS SQOOP_ARGES
+cd /Documents/sqoop
+cd sqoop
+
+cd employees_db
+
+sudo service mysqld status
+
+mysql -u root -p -t < employees.sql  // to extract the file the write the password  cloudera  mean its integrated  now  
+
+
+mysql -u root -p  //then write the pass
+
+use employees;
+show tables;
+
+grant ALL on emplyees.* to cloudera@localhost identified by 'cloudera';
+mysql -u root -p employees     // from exterier de sql  pour verfie le grant privelidge 
+
+sqoop list-databases --connect jdbc:mysql://localhost/ --username cloudera --password cloudera
+
+
+sqoop list-tables --connect jdbc:mysql://localhost/employees --username cloudera --password cloudera
+
+
+sqoop import --connect jdbc:mysql://localhost/employees --username cloudera --password cloudera --table employees -m 1 --target-dir /user/cloudera/sqoop-mysql/employees
+
+
+sqoop import --connect jdbc:mysql://localhost/employees --username cloudera --password cloudera --table employees -m 1 --hive-import --create-hive-table --hive-table departments_mysql --target-dir /user/cloudera/employees/ --fields-terminated-by ,
+
+..............
+
+ sqoop import --connect jdbc:mysql://localhost/employees --username cloudera --password cloudera --table employees -m 1 --hive-import --create-hive-table --hive-table emp_mysql departments_mysql --hive-database emp_mysql --target-dir /user/hive/warehouse/emp_mysql.db/departments_mysql/ --fields-terminated-by ,       //  but there is error 
+
+
+
