@@ -1,0 +1,28 @@
+beeline -u jdbc:hive2://localhost:10000
+impala-shell
+invalidate metadata;
+
+show Databases;
+show tables;
+use pokeman;
+select avg(hp) from pokemon ;
+
+create table pokemon1 as select *,IF(HP >69.25875 ,'powerful',IF(hp >69.25875,'1','powerless')) AS power_rate from pokemon;   //  apr/s * ,will create new columns that will call power_rate et divisier par moderate ou powerless
+
+select * from pokemon 1 limit 5 ;
+
+
+select count(name),power_rate form pokemon1 group by power_rate;
+
+select name,hp from pokemon1 order by hr desc limit 10 ;
+
+select name,attack from pokmon1 order by attack  desc limit 10 ;
+
+select name,defence from pokmon1 order by defence  desc limit 10 ;
+
+select name,total from pokmon1 order by total  desc limit 10 ;
+
+select name,(attack-sp_atk) as atk_diff from pokmon1 order by at-diff limit 10  ;
+
+
+
