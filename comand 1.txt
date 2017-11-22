@@ -1,0 +1,95 @@
+hdfs fsck /exerceice1/hamlet1.txt  pour connait le taill de file
+hdfs dfs -cat /exercice1/hamlet.txt      pour tout le contenu 
+
+head - n10 / home/cloudera/document/hdfs/hamlet.txt   pour imprimer just 25 prim lines
+
+hdfs dfs -cat /excercice1/hamlet.txt | head -n10    pour primear 10 lines
+hdfs dfs -cat /excercice1/hamlet.txt | tail -n10    pour dernier  10 lines
+
+hdfs dfs -cp /excercie1/hamlet.txt /excercise1/hamlet_hdfs_copy.txt  pour copy inside hdfs
+hdfs dfs -ls /excercies1 pour verfier 
+
+hdfs dfs -copyToLocal /exercice1/hamlet.txt  /home/cloudera/hdfs/hamlet_local_copy.txt  pour copy to  local  pour verfier  aller le dirctor  document 
+
+hdfs fsck /      pour verfier  statues :healthy , fator de replaction factor, nuber de data node ,
+
+hdfs dfsadmin -report 
+
+hdfs  dfs -rm  /excecice1/hamlet.txt    pour remove 
+hdfs  dfs -rm -r /excecice1   pour remove le director excercise 
+
+
+
+---------------
+excercice 2
+
+hdfs dfs -mkdir /user/hdfs
+hdfs dfs -copyFromLocal /home/cloudera/Documents/hdfs/FlumeData/* /user/hdfs
+
+hdfs dfs -ls /user
+
+hdfs dfs -getmerge /user/hdfs/*  /home/cloudera/document/hdfs/FlumData/FlumeDataAll.txt  pour cree sur local .
+
+
+
+wc -l /home/cloudera/Documents/hdfs/FlumeData/*    pour  impremier  tout le files sur le dirctory 
+---------------------------------------------------------------------------------
+
+sudo jps 
+
+sudo --service --status-all
+
+hadoop jar /usr/lib/hadoop-0.20-mapreduce/hadoop-examples-2.6.0-mr1-cdh5.12.0.jar 
+
+ hadoop jar /usr/lib/hadoop-0.20-mapreduce/hadoop-examples-2.6.0-mr1-cdh5.12.0.jar wordcount /wc_in /wc_out1
+
+ javac -classpath hadoop-core-1.2.1.jar -d units ProcessUnits.java
+
+hdfs dfs -cat wc_out/part-r-00000 | head -n15
+hdfs dfs -cat wc_out/part-r-00000 | grep -x "the"
+hdfs dfs -cat /wc_out1/part-r-00000 | grep -w "^the\b"
+
+hdfs dfs -copyToLocal /ex3_out/part-00000  /home/cloudera/hadoopdev/resultat.txt
+
+hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming-2.6.0-cdh5.12.0.jar -input /stream_in -output /stream_out -mapper /home/cloudera/hadoopstream/mapper.py -reducer /home/cloudera/hadoopstream/reducer.py 
+
+
+hadoop jar top5.jar Top5_categories  /youtube_in/youtubedata.txt /youtube_out
+
+
+hadoop fs -cat /youtube_out/part-r-00000 | sort -n -k2 -r | head -n5
+
+hadoop jar /usr/lib/hadoop-0.20-mapreduce/hadoop-examples-2.6.0-mr1-cdh5.12.0.jar sudoku /home/cloudera/Documents/grille1.txt
+---------------------------
+Class of yarn 
+-------------------------
+
+ yarn jar /usr/lib/hadoop-0.20-mapreduce/hadoop-examples-2.6.0-mr1-cdh5.12.0.jar pi 10 5000  like map resduce process the file  and its like task runner 
+
+yarn application -list appStates ALL       to see which task working now 
+
+yarn application -kill application_1508283049442_0005     to end the process of the task 
+
+javac -classpath /usr/lib/hadoop/hadoop-common-2.6.0-cdh5.12.0.jar:/usr/lib/hadoop-mapreduce/hadoop-mapreduce-client-core-2.6.0-cdh5.12.0.jar:/usr/lib/hadoop/client/commons-cli-1.2.jar  *.java   to combile la code and to create the classess that will create after that jar file that i will use it 
+
+jar cvf MaxMt.jar *.class     run the jar file after i created it 
+
+rm *.class      after i delete all classes from the directory and this code must run when i reste dans la directory mapreddev.
+
+yarn jar /home/cloudera/mapreddev/MaxMt.jar MaxMonthlyTemp /temp_in /temp_out        pour lancer la application 
+
+## after that in the excercie i rempble the line insde the file java that call MaxMonthlyTemp.java   after that start all again  from   javac .....   to combile al java files in another directory for no dublicate . then  check the output , u will find the combile in and out = 0  but before it was equall  in   = 1095   and out 12
+
+
+
+
+
+
+
+
+
+
+
+
+
+

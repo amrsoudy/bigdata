@@ -1,0 +1,78 @@
+CREATE DATABASE computersalesdb;
+
+use computersalesdb;
+
+drop table sales_staging;
+
+CREATE TABLE IF NOT EXISTS products
+(
+	prod_name STRING,
+	description STRING,
+	category STRING,
+	qty_on_hand INT,
+	prod_num STRING,
+	packaged_with ARRAY<STRING>
+)
+	ROW FORMAT DELIMITED
+	FIELDS TERMINATED BY ','
+	COLLECTION ITEMS TERMINATED BY ':'
+	STORED AS TEXTFILE;
+	
+	ALTER TABLE products SET TBLPROPERTIES ("skip.header.line.count"="1")
+	
+	
+CREATE TABLE IF NOT EXISTS sales_staging
+(
+	cust_id STRING,
+	prod_num STRING,
+	qty INT,
+	sale_date STRING,
+	sales_id STRING
+)
+	COMMENT 'Staging table for sales data'
+	ROW FORMAT DELIMITED
+	FIELDS TERMINATED BY ','
+	STORED AS TEXTFILE;
+	
+	ALTER TABLE sales_staging SET TBLPROPERTIES ("skip.header.line.count"="1");
+	ALTER TABLE sales_staging CHANGE sale_date sale_date DATE;
+	
+    CREATE TABLE IF NOT EXISTS sales
+    (
+	    cust_id STRING,
+    	prod_num STRING,
+    	qty INT,
+    	sales_id STRING
+    )
+	COMMENT 'Table for analysis of sales data'
+	PARTITIONED BY (sales_date DATE)
+	ROW FORMAT DELIMITED
+	FIELDS TERMINATED BY ','
+	STORED AS TEXTFILE;
+	
+	LOAD DATA INPATH '/user/cloudera/hive/Product.csv' OVERWRITE INTO TABLE products;	
+	LOAD DATA INPATH '/user/cloudera/hive/Sales.csv' INTO TABLE sales_staging;
+	
+	INSERT OVERWRITE TABLE sales
+	PARTITION (sales_date = '2012-01-09')
+	SELECT cust_id, prod_num, qty, sales_id
+	FROM sales_staging ss
+	WHERE ss.sale_date = '2012-01-09';
+	
+	INSERT OVERWRITE TABLE sales
+    PARTITION (sales_date = '2012-01-24')
+	SELECT cust_id, prod_num, qty, sales_id
+	FROM sales_staging ss
+	WHERE ss.sale_date = '2012-01-24';
+	
+	SELECT * FROM products WHERE category='Video';
+	SELECT * FROM products WHERE category='Video' AND PACKAGED_WITH[0]='dvd';
+	SELECT category, count(*) FROM products GROUP BY category;
+	
+	FROM(SELECT category, count(*) as count FROM products GROUP BY category) cats SELECT * WHERE cats.count > 3;
+	
+	SELECT * FROM sales WHERE sales_date = '2012-01-24' ORDER BY sales_id;
+	
+	SELECT s.cust_id, s.prod_num, s.qty, s.sales_id, p.prod_name, p.category FROM sales s JOIN products p
+    ON s.prod_num = p.prod_num
+    WHERE s.sales_date = '2012-01-09' AND p.category = 'Optical';
